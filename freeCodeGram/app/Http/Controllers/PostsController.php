@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class PostsController extends Controller
 {
@@ -25,6 +26,9 @@ class PostsController extends Controller
         
         //Save image into uploads folder inside storage/public - not accessible to users - run php artisan storage:link - creates symbolic link between private storage and public directory
         $imagePath = request('image')->store('/uploads', 'public');
+
+        $image = Image::make(public_path("storage/{$imagePath}"))->fit(1200, 1200); //Using intervention/image package to resize pictures
+        $image->save();
 
         //Get authenticated user - create post against that user id:
         auth()->user()->posts()->create([
