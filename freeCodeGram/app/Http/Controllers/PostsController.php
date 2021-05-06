@@ -22,10 +22,17 @@ class PostsController extends Controller
             'caption' => 'required',
             'image' => ['required', 'image'],
         ]);
+        
+        //Save image into uploads folder inside storage/public - not accessible to users - run php artisan storage:link - creates symbolic link between private storage and public directory
+        $imagePath = request('image')->store('/uploads', 'public');
 
         //Get authenticated user - create post against that user id:
-        auth()->user()->posts()->create($data);
+        auth()->user()->posts()->create([
+            'caption' => $data['caption'],
+            'image' => $imagePath,
+        ]);
 
-        dd(request()->all());
+        //Redirect to user's profile page
+        return redirect('/profile/' . auth()->user()->id);
     }
 }
