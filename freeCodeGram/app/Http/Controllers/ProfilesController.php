@@ -36,11 +36,13 @@ class ProfilesController extends Controller
 
             $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000); //Using intervention/image package to resize pictures
             $image->save();
+
+            $imageArray = ['image' => $imagePath];
         }
 
          auth()->user()->profile->update(array_merge(
              $data,
-             ['image' => $imagePath]
+             $imageArray ?? []      //Allows user to update profile without having to change profile pic - If no image uploaded $imageArray will just be empty array
          ));
         
         return redirect("/profile/{$user->id}");
