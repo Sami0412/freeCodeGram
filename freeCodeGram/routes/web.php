@@ -21,6 +21,8 @@ Auth::routes();
 
 //Order of routes is important!!
 
+Route::post('follow/{user}', [App\Http\Controllers\FollowsController::class, 'store']);
+
 Route::get('/p/create', [App\Http\Controllers\PostsController::class, 'create']);  //Must use namespace in Laravel 8 - don't follow tutorial!
 Route::post('/p', [App\Http\Controllers\PostsController::class, 'store']);
 Route::get('/p/{post}', [App\Http\Controllers\PostsController::class, 'show']); //Order - Anything with a variable (e.g. {post}) should be last
